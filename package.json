@@ -36,6 +36,8 @@
 		"build:dev": "env NODE_ENV=dev browserify src/index.js >dist/bundle.js"
 	},
 	"dependencies": {
+		"luxon": "^0.2.6",
+		"ms": "^2.1.1",
 		"snabbdom": "^0.7.0"
 	}
 }
