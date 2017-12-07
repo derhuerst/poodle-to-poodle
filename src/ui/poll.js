@@ -5,8 +5,9 @@ const h = require('snabbdom/h').default
 const renderHeader = require('./poll-header')
 const renderChoice = require('./poll-choice')
 const renderChoiceSummary = require('./poll-choice-summary')
+const renderPollSubmitRow = require('./poll-submit-row')
 
-const renderPoll = (poll, votes) => {
+const renderPoll = (poll, votes, onSubmit) => {
 	const choices = [
 		h('td') // empty top left field
 	]
@@ -52,6 +53,22 @@ const renderPoll = (poll, votes) => {
 		votesRows.push(h('tr', {}, cells))
 	}
 
+	let author = ''
+	const chosen = Object.keys(poll.choices).reduce((o, cId) => {
+		o[cId] = 'yes'
+		return o
+	}, {})
+
+	const onAuthorChange = (newAuthor) => {
+		author = newAuthor
+	}
+	const onChosen = (choiceId, choice) => {
+		chosen[choiceId] = choice
+	}
+	const onSubmitBtnClick = () => {
+		onSubmit(author, chosen)
+	}
+
 	return h('div', {}, [
 		...renderHeader(poll),
 		h('table', {
@@ -61,8 +78,16 @@ const renderPoll = (poll, votes) => {
 			// todo: use thead & tbody
 			h('tr', {class: {'poll-choices': true}}, choices),
 			h('tr', {class: {'poll-summary': true}}, summary),
+			renderPollSubmitRow(chosen, onAuthorChange, onChosen),
 			...votesRows
-		])
+		]),
+		h('button', {
+			attrs: {
+				type: 'button',
+				id: 'poll-submit'
+			},
+			on: {click: onSubmitBtnClick}
+		}, ['submit'])
 	])
 }
 

@@ -72,6 +72,7 @@ button {
 	padding: .3em .5em;
 	width: auto;
 	line-height: 1;
+	font-size: inherit;
 	color: white;
 	background-color: #c0392b;
 	border: 2px solid transparent;
