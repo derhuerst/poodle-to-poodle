@@ -1,0 +1,38 @@
+{
+	"private": true,
+	"name": "poodle-to-poodle",
+	"description": "Like Doodle.com, but P2P because it's powered by dat.",
+	"version": "0.1.0",
+	"main": "index.js",
+	"keywords": [
+		"doodle",
+		"meetings",
+		"scheduling",
+		"p2p",
+		"peer to peer",
+		"dat",
+		"beaker"
+	],
+	"author": "Jannis R <mail@jannisr.de>",
+	"contributors": [
+		"Dirk Schumacher <mail@dirk-schumacher.de>"
+	],
+	"homepage": "https://github.com/derhuerst/poodle-to-poodle",
+	"repository": "derhuerst/poodle-to-poodle",
+	"bugs": "https://github.com/derhuerst/poodle-to-poodle/issues",
+	"license": "ISC",
+	"engines": {
+		"node": ">=6"
+	},
+	"devDependencies": {
+		"babel-core": "^6.26.0",
+		"babel-preset-env": "^1.6.1",
+		"babelify": "^8.0.0",
+		"browserify": "^14.5.0",
+		"envify": "^4.1.0"
+	},
+	"scripts": {
+		"build": "env NODE_ENV=production browserify src/index.js -g [babelify --presets env] -g envify >dist/bundle.js",
+		"build:dev": "env NODE_ENV=dev browserify src/index.js >dist/bundle.js"
+	}
+}
