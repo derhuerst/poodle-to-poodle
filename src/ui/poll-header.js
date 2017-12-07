@@ -9,7 +9,7 @@ const renderCreated = (when) => {
 	const dt = DateTime.fromMillis(when)
 
 	return h('abbr', {
-		atts: {title: dt.toLocaleString(DateTime.DATETIME_FULL)}
+		attrs: {title: dt.toLocaleString(DateTime.DATETIME_FULL)}
 	}, [
 		h('time', {
 			attrs: {datetime: dt.toISO()}
