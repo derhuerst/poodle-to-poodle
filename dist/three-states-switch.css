@@ -1,0 +1,33 @@
+.three-states-switch {
+	display: inline-block;
+	margin: 0;
+}
+
+.three-states-switch .three-states-switch-toggle {
+	margin: 0;
+	padding-left: 0;
+	padding-right: 0;
+	width: 2em;
+	text-align: center;
+	border-color: transparent;
+	background-color: #fff;
+}
+
+.three-states-switch .three-states-switch-toggle:focus,
+.three-states-switch.three-states-switch-yes .three-states-switch-toggle:focus,
+.three-states-switch.three-states-switch-maybe .three-states-switch-toggle:focus,
+.three-states-switch.three-states-switch-no .three-states-switch-toggle:focus {
+	border-color: #666;
+}
+
+.three-states-switch.three-states-switch-yes .three-states-switch-toggle {
+	color: #18AB36;
+	border-color: #18AB36;
+}
+.three-states-switch.three-states-switch-maybe .three-states-switch-toggle {
+	color: #e1b400;
+	border-color: #e1b400;
+}
+.three-states-switch.three-states-switch-no .three-states-switch-toggle {
+	color: #c0392b;
+}

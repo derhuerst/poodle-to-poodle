@@ -9,5 +9,6 @@ pnpm-debug.log
 package-lock.json
 shrinkwrap.yaml
 
-/dist/*
-!/dist/index.html
+/dist/bundle.js
+/dist/poll.json
+/dist/votes

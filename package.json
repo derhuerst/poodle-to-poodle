@@ -34,5 +34,8 @@
 	"scripts": {
 		"build": "env NODE_ENV=production browserify src/index.js -g [babelify --presets env] -g envify >dist/bundle.js",
 		"build:dev": "env NODE_ENV=dev browserify src/index.js >dist/bundle.js"
+	},
+	"dependencies": {
+		"snabbdom": "^0.7.0"
 	}
 }
