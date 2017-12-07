@@ -45,13 +45,18 @@ const patch = snabbdom.init([
 				return {choiceId, value: chosen[choiceId]}
 			})
 		})
+		.then(rerender)
 		.catch(console.error)
 	}
 
-	const tree = h('main', {attrs: {id: 'content'}}, [
-		renderPoll(poll, votes, onSubmit)
-	])
-	const root = document.querySelector('#app')
-	patch(root, tree)
+	let tree = document.querySelector('#app')
+	const rerender = () => {
+		const newTree = h('main', {attrs: {id: 'content'}}, [
+			renderPoll(poll, votes, onSubmit)
+		])
+		patch(tree, newTree)
+		tree = newTree
+	}
+	rerender()
 })()
 .catch(console.error)

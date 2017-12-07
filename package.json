@@ -29,10 +29,11 @@
 		"babel-preset-env": "^1.6.1",
 		"babelify": "^8.0.0",
 		"browserify": "^14.5.0",
-		"envify": "^4.1.0"
+		"envify": "^4.1.0",
+		"uglifyify": "^4.0.5"
 	},
 	"scripts": {
-		"build": "env NODE_ENV=production browserify src/index.js -g [babelify --presets env] -g envify >dist/bundle.js",
+		"build": "env NODE_ENV=production browserify src/index.js -g [babelify --presets env] -g envify -g uglifyify >dist/bundle.js",
 		"build:dev": "env NODE_ENV=dev browserify src/index.js >dist/bundle.js"
 	},
 	"dependencies": {
