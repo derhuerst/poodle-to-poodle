@@ -25,7 +25,7 @@ const patch = snabbdom.init([
 
 	const poll = JSON.parse(await archive.readFile('/poll.json'))
 	const votes = []
-	const regex = new RegExp('^[a-z0-9]{2,30}\.json$', 'i')
+	const regex = new RegExp('^[a-z0-9]{8}\.json$', 'i')
 	for (let file of await archive.readdir('/votes')) {
 		const isJson = regex.test(file)
 		if (isJson) {
