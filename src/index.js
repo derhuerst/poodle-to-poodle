@@ -23,7 +23,6 @@ const patch = snabbdom.init([
 	const baseUrl = global.location.protocol + '//' + global.location.host
 	const archive = new DatArchive(baseUrl)
 
-
 	const poll = JSON.parse(await archive.readFile('/poll.json'))
 	const votes = []
 	const regex = new RegExp('^[a-z0-9]{2,30}\.json$', 'i')
