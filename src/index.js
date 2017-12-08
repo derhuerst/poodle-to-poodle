@@ -41,6 +41,10 @@ const patch = snabbdom.init([
 		votes.push(vote)
 	}
 
+	const commit = async () => {
+		await archive.commit()
+	}
+
 	const onSubmit = (author, chosen) => {
 		addVote({
 			id: randomId(8),
@@ -49,6 +53,7 @@ const patch = snabbdom.init([
 				return {choiceId, value: chosen[choiceId]}
 			})
 		})
+		.then(commit)
 		.then(rerender)
 		.catch(console.error)
 	}
