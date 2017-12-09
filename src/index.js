@@ -68,21 +68,16 @@ const patch = snabbdom.init([
 		votes.push(vote)
 	}
 
-	const commit = async () => {
-		await archive.commit()
-	}
-
-	const onSubmit = (author, chosen) => {
-		addVote({
+	const onSubmit = async (author, chosen) => {
+		await addVote({
 			id: randomId(8),
 			author,
 			choices: Object.keys(chosen).map((choiceId) => {
 				return {choiceId, value: chosen[choiceId]}
 			})
 		})
-		.then(commit)
-		.then(rerender)
-		.catch(console.error)
+		await archive.commit()
+		await rerender()
 	}
 
 	let tree = document.querySelector('#app')
