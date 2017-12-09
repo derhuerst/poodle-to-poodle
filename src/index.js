@@ -23,6 +23,23 @@ const patch = snabbdom.init([
 	const baseUrl = global.location.protocol + '//' + global.location.host
 	const archive = new DatArchive(baseUrl)
 
+	const isValidVote = (vote) => {
+		const isValidChoice = (choice) => {
+			return choice.hasOwnProperty('choiceId') &&
+				choice.hasOwnProperty('value') &&
+				choice['choiceId'].length > 0 &&
+				['yes', 'no', 'maybe'].includes(choice['value'])
+		}
+		const and = (x, y) => x && y
+		const isValid = vote.hasOwnProperty('id') &&
+			vote.hasOwnProperty('author') &&
+			vote.hasOwnProperty('choices') &&
+			vote['author'].length > 0 &&
+			vote['choices'].length > 0 &&
+			vote['choices'].map(isValidChoice).reduce(and)
+		return isValid
+	}
+
 	const poll = JSON.parse(await archive.readFile('/poll.json'))
 	const votes = []
 	const regex = new RegExp('^[a-z0-9]{8}\.json$', 'i')
@@ -30,12 +47,16 @@ const patch = snabbdom.init([
 		const isJson = regex.test(file)
 		if (isJson) {
 			const vote = JSON.parse(await archive.readFile('/votes/' + file))
-			votes.push(vote)
+			if (isValidVote(vote)) {
+				votes.push(vote)
+			}
 		}
 	}
 
 	const addVote = async (vote) => {
-		// todo: validation
+		if (!isValidVote(vote)) {
+			return
+		}
 		const dest = '/votes/' + vote.id + '.json'
 		await archive.writeFile(dest, JSON.stringify(vote))
 		votes.push(vote)
