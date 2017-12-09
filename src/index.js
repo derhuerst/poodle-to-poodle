@@ -46,15 +46,21 @@ const patch = snabbdom.init([
 	for (let file of await archive.readdir('/votes')) {
 		const isJson = regex.test(file)
 		if (isJson) {
-			const vote = JSON.parse(await archive.readFile('/votes/' + file))
-			if (isValidVote(vote)) {
-				votes.push(vote)
+			try {
+				const vote = JSON.parse(await archive.readFile('/votes/' + file))
+				if (isValidVote(vote)) {
+					votes.push(vote)
+				}
+			} catch(e) {
+				// TODO: user UI feedback
+				console.error(e)
 			}
 		}
 	}
 
 	const addVote = async (vote) => {
 		if (!isValidVote(vote)) {
+			// TODO: input validation feedback in the UI
 			return
 		}
 		const dest = '/votes/' + vote.id + '.json'
