@@ -43,47 +43,130 @@ const patch = snabbdom.init([
 	const poll = JSON.parse(await archive.readFile('/poll.json'))
 	const votes = []
 	const regex = new RegExp('^[a-z0-9]{8}\.json$', 'i')
-	for (let file of await archive.readdir('/votes')) {
-		const isJson = regex.test(file)
-		if (isJson) {
-			try {
-				const vote = JSON.parse(await archive.readFile('/votes/' + file))
-				if (isValidVote(vote)) {
-					votes.push(vote)
+	const isJson = (fileName) => regex.test(fileName)
+	const localVotes = await archive.readdir('/votes')
+	await Promise.all(
+		localVotes
+		.map(async (file) => {
+			if (isJson(file)) {
+				try {
+					const vote = JSON.parse(await archive.readFile('/votes/' + file))
+					if (isValidVote(vote)) {
+						votes.push(vote)
+					}
+				} catch(e) {
+					// TODO: user UI feedback
+					console.error(e)
 				}
-			} catch(e) {
-				// TODO: user UI feedback
-				console.error(e)
 			}
-		}
-	}
+		})
+	)
 
-	const addVote = async (vote) => {
+	// TODO: sort votes by time in the UI I guess
+
+	const addVote = async (targetArchive, vote) => {
 		if (!isValidVote(vote)) {
 			// TODO: input validation feedback in the UI
 			return
 		}
 		const dest = '/votes/' + vote.id + '.json'
-		await archive.writeFile(dest, JSON.stringify(vote))
-		votes.push(vote)
+		await targetArchive.writeFile(dest, JSON.stringify(vote))
 	}
 
-	const onSubmit = async (author, chosen) => {
-		await addVote({
+	const newVoteRecord = (author, chosen) => {
+		return {
 			id: randomId(8),
 			author,
 			choices: Object.keys(chosen).map((choiceId) => {
 				return {choiceId, value: chosen[choiceId]}
 			})
-		})
+		}
+	}
+
+	const onSubmit = async (author, chosen) => {
+		const vote = newVoteRecord(author, chosen)
+		await addVote(archive, vote)
+		votes.push(vote)
+		await archive.commit()
+		await rerender()
+	}
+
+	const copyFile = async (targetArchive, filePath) => {
+		const content = await archive.readFile(filePath)
+		await targetArchive.writeFile(filePath, content)
+	}
+
+	const createVotingPageForPoll = async (author, chosen) => {
+
+		const voteRecord = newVoteRecord(author, chosen)
+		if (!isValidVote(voteRecord)) {
+			// TODO: input validation feedback in the UI
+			return
+		}
+
+		const newPoll = await DatArchive.create({
+		  title: 'Vote page for ' + poll.title,
+		  description: 'This is a tempory page that you can use to vote'
+		}) // TODO: add more details about what comes next
+
+		const copy = (path) => copyFile(newPoll, path)
+
+		await newPoll.mkdir('/votes')
+
+		const votes = await archive.readdir('/votes')
+		await Promise.all(
+			votes
+			.filter(isJson)
+			.map(async (file) => {
+				await copy('/votes/' + file)
+			})
+			.concat(
+				[
+				 copy('poll.json'),
+				 copy('index.html'),
+				 copy('base.css'),
+				 copy('poll.css'),
+				 copy('system-font.css'),
+				 copy('three-states-switch.css'),
+				 copy('bundle.js')
+				]
+			)
+		)
+
+		await addVote(newPoll, voteRecord)
+
+		await newPoll.commit()
+		window.location = newPoll.url
+	}
+
+	const syncWithOtherDat = async (datUrl) => {
+		const targetAchrive = new DatArchive(datUrl)
+		const voteFiles = await targetAchrive.readdir('/votes')
+		await Promise.all(
+			voteFiles
+			.filter(isJson)
+			.map(async (file) => {
+				const targetFilePath = '/votes/' + file
+				try {
+					await archive.readFile(targetFilePath)
+				} catch(e) {
+					const jsonVote = await targetAchrive.readFile(targetFilePath)
+					const vote = JSON.parse(jsonVote)
+					if (isValidVote(vote)) {
+						await archive.writeFile(targetFilePath, jsonVote)
+						votes.push(vote)
+					}
+				}
+			})
+		)
 		await archive.commit()
 		await rerender()
 	}
 
 	let tree = document.querySelector('#app')
-	const rerender = () => {
+	const rerender = async () => {
 		const newTree = h('main', {attrs: {id: 'content'}}, [
-			renderPoll(poll, votes, onSubmit)
+			renderPoll(poll, votes, onSubmit, createVotingPageForPoll, syncWithOtherDat)
 		])
 		patch(tree, newTree)
 		tree = newTree

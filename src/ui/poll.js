@@ -7,7 +7,7 @@ const renderChoice = require('./poll-choice')
 const renderChoiceSummary = require('./poll-choice-summary')
 const renderPollSubmitRow = require('./poll-submit-row')
 
-const renderPoll = (poll, votes, onSubmit) => {
+const renderPoll = (poll, votes, onSubmit, forkCurrentPoll, syncWithRemoteDat) => {
 	const choices = [
 		h('td') // empty top left field
 	]
@@ -68,6 +68,15 @@ const renderPoll = (poll, votes, onSubmit) => {
 	const onSubmitBtnClick = () => {
 		onSubmit(author, chosen)
 	}
+	const onVoteBtnClick = () => {
+		forkCurrentPoll(author, chosen)
+	}
+	const onSyncBtnClick = () => {
+		const datUrl = prompt("Give me the url")
+		if (datUrl != null) {
+			syncWithRemoteDat(datUrl)
+		}
+	}
 
 	return h('div', {}, [
 		...renderHeader(poll),
@@ -87,7 +96,21 @@ const renderPoll = (poll, votes, onSubmit) => {
 				id: 'poll-submit'
 			},
 			on: {click: onSubmitBtnClick}
-		}, ['submit'])
+		}, ['submit']),
+		h('button', {
+			attrs: {
+				type: 'button',
+				id: 'poll-vote'
+			},
+			on: {click: onVoteBtnClick}
+		}, ['vote']),
+		h('button', {
+			attrs: {
+				type: 'button',
+				id: 'poll-sync'
+			},
+			on: {click: onSyncBtnClick}
+		}, ['sync'])
 	])
 }
 
