@@ -96,21 +96,21 @@ const renderPoll = (poll, votes, onSubmit, forkCurrentPoll, syncWithRemoteDat) =
 				id: 'poll-submit'
 			},
 			on: {click: onSubmitBtnClick}
-		}, ['submit']),
+		}, ['vote (you are the owner)']),
 		h('button', {
 			attrs: {
 				type: 'button',
 				id: 'poll-vote'
 			},
 			on: {click: onVoteBtnClick}
-		}, ['vote']),
+		}, ['vote (you are not the owner)']),
 		h('button', {
 			attrs: {
 				type: 'button',
 				id: 'poll-sync'
 			},
 			on: {click: onSyncBtnClick}
-		}, ['sync'])
+		}, ['sync back (you are the owner)'])
 	])
 }
 

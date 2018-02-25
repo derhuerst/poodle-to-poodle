@@ -109,3 +109,15 @@ td.poll-unknown {
 	margin-top: 1rem;
 	margin-bottom: 1rem;
 }
+
+#poll-vote {
+	display: block;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+}
+
+#poll-sync {
+	display: block;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+}

@@ -88,7 +88,7 @@ const patch = snabbdom.init([
 		await addVote(archive, vote)
 		votes.push(vote)
 		await archive.commit()
-		await rerender()
+		rerender()
 	}
 
 	const copyFile = async (targetArchive, filePath) => {
@@ -160,11 +160,11 @@ const patch = snabbdom.init([
 			})
 		)
 		await archive.commit()
-		await rerender()
+		rerender()
 	}
 
 	let tree = document.querySelector('#app')
-	const rerender = async () => {
+	const rerender = () => {
 		const newTree = h('main', {attrs: {id: 'content'}}, [
 			renderPoll(poll, votes, onSubmit, createVotingPageForPoll, syncWithOtherDat)
 		])
