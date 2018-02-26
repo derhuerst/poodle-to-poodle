@@ -12,4 +12,3 @@ shrinkwrap.yaml
 /dist/bundle.js
 /dist/dat.json
 /dist/poll.json
-/dist/votes
