@@ -56,6 +56,7 @@ const renderPoll = (state, actions) => {
 	// state
 	let author = ''
 	const chosen = {}
+	for (let choiceId of Object.keys(state.poll.choices)) chosen[choiceId] = 'yes'
 
 	const onAuthorChange = (newAuthor) => {
 		author = newAuthor

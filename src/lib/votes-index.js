@@ -22,7 +22,7 @@ const createVotesIndex = async (self, db, archive, ownVoteDat) => {
 	db.indexArchive(self)
 	const voteDats = JSON.parse(await archive.readFile('/vote-dats.json'))
 	for (let voteDat of voteDats) {
-		db.indexArchive(voteAddr, {watch: false}) // todo: watch
+		db.indexArchive(voteDat, {watch: false}) // todo: watch
 	}
 
 	const getIndexedVotes = async () => {

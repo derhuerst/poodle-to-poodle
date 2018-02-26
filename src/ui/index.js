@@ -8,7 +8,7 @@ const styleForSnabbdom = require('snabbdom/modules/style').default
 const eventsForSnabbdom = require('snabbdom/modules/eventlisteners').default
 const h = require('snabbdom/h').default
 
-const createRenderPoll = require('./poll')
+const renderPoll = require('./poll')
 
 const patch = snabbdom.init([
 	attrsForSnabbdom,

@@ -4,6 +4,7 @@ const randomString = require('crypto-random-string')
 const WebDB = require('@beaker/webdb')
 
 const createVotesIndex = require('./lib/votes-index')
+const addVoteDat = require('./lib/add-vote-dat')
 const createUi = require('./ui')
 
 const newVote = (author, chosen) => {
@@ -43,25 +44,28 @@ const newVote = (author, chosen) => {
 			state.votes.push(vote)
 		}
 
-		let archive
+		let voteArchive
 		if (!ownVoteDat) {
 			// todo: handle rejection
-			archive = await DatArchive.create({
+			voteArchive = await DatArchive.create({
 				// todo: add meaningful metadata
 				title: 'poodle-to-poodle vote'
 			})
-			ownVoteDat = archive.url
+			ownVoteDat = voteArchive.url
 			window.localStorage.setItem('own-vote-dat', ownVoteDat)
-		} else archive = new DatArchive(ownVoteDat)
+		} else voteArchive = new DatArchive(ownVoteDat)
 
-		await archive.writeFile('/vote.json', JSON.stringify(vote))
+		await voteArchive.writeFile('/vote.json', JSON.stringify(vote))
+		await voteArchive.commit()
+
+		await addVoteDat(archive, ownVoteDat)
 
 		state.votes.push(vote)
 		rerender()
 	}
 
 	const putOwnVote = (author, chosen) => {
-		_putOwnVote()
+		_putOwnVote(author, chosen)
 		.catch(console.error) // todo: display error
 	}
 	const actions = {putOwnVote}
