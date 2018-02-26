@@ -20,11 +20,10 @@ const patch = snabbdom.init([
 
 const createUi = (container, actions) => {
 	let tree = container
-	const renderPoll = createRenderPoll(actions)
 
 	const rerender = (state) => {
 		const newTree = h('main', {attrs: {id: 'content'}}, [
-			renderPoll(state)
+			renderPoll(state, actions)
 		])
 		patch(tree, newTree)
 		tree = newTree
