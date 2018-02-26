@@ -87,6 +87,9 @@ const patch = snabbdom.init([
 
 	const onSubmit = async (author, chosen) => {
 		const vote = newVoteRecord(author, chosen)
+		if (!isValidVote(vote)) {
+			return
+		}
 		await addVote(archive, vote)
 		votes.push(vote)
 		await archive.commit()
