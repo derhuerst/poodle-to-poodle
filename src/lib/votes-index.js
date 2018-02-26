@@ -10,7 +10,7 @@ const isValidVote = require('./is-valid-vote')
 // Our approach has a major drawback though: Whenever the owner of a vote dat
 // is offline (and no one else is replicating it), we can't show the votes.
 // todo: Cache votes in the main dat archive.
-const createVotesIndex = async (self, db, archive) => {
+const createVotesIndex = async (self, db, archive, ownVoteDat) => {
 	db.define('votes', {
 		validate: isValidVote,
 		index: ['id'],
@@ -25,7 +25,13 @@ const createVotesIndex = async (self, db, archive) => {
 		db.indexArchive(voteAddr, {watch: false}) // todo: watch
 	}
 
-	const getIndexedVotes = () => db.votes.query().toArray()
+	const getIndexedVotes = async () => {
+		const votes = await db.votes.query().toArray()
+		for (let vote of votes) {
+			if (vote.getRecordOrigin() === ownVoteDat) vote.isOwner = true
+		}
+		return votes
+	}
 
 	// todo: write support
 	return {get: getIndexedVotes}

@@ -35,6 +35,7 @@
 	},
 	"dependencies": {
 		"@beaker/webdb": "^4.1.0",
+		"crypto-random-string": "^1.0.0",
 		"luxon": "^0.5.3",
 		"ms": "^2.1.1",
 		"snabbdom": "^0.7.0"
