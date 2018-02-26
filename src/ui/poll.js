@@ -34,17 +34,17 @@ const renderPoll = (poll, votes, onSubmit, forkCurrentPoll, syncWithRemoteDat) =
 		]
 
 		for (let choiceId of Object.keys(poll.choices)) {
-			const chosen = vote.choices.find(c => c.choiceId === choiceId)
+			const chosen = vote.chosen[choiceId]
 			const text = chosen && {
 				yes: '✔',
 				maybe: '(✔)',
 				no: '✘'
-			}[chosen.value] || '?'
+			}[chosen] || '?'
 			const cls = chosen && {
 				yes: 'poll-yes',
 				maybe: 'poll-maybe',
 				no: 'poll-no'
-			}[chosen.value] || 'poll-unknown'
+			}[chosen] || 'poll-unknown'
 
 			// todo: alt text or <abbr>
 			cells.push(h('td', {class: {[cls]: true}}, [text]))

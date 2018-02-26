@@ -2,25 +2,26 @@
 
 const hasProp = (o, k) => Object.prototype.hasOwnProperty.call(o, k)
 
-const isValidChoice = (choice) => {
-	return (
-		hasProp(choice, 'choiceId') &&
-		hasProp(choice, 'value') &&
-		choice.choiceId.length > 0 &&
-		['yes', 'no', 'maybe'].includes(choice.value)
-	)
-}
+const isObj = o => o !== null && 'object' === typeof o && !Array.isArray(o)
+
+const validValues = ['yes', 'no', 'maybe']
 
 const isValidVote = (vote) => {
-	return (
-		hasProp(vote, 'id') &&
-		hasProp(vote, 'author') &&
-		'string' === typeof vote.author &&
-		vote.author.length > 0 &&
-		Array.isArray(vote.choices) &&
-		vote.choices.length > 0 &&
-		vote.choices.every(isValidChoice)
-	)
+	if (
+		!hasProp(vote, 'id') ||
+		!hasProp(vote, 'author') ||
+		'string' !== typeof vote.author ||
+		vote.author.length === 0 ||
+		!isObj(vote.chosen)
+	) return false
+
+	const choiceIds = Object.keys(vote.chosen)
+	if (choiceIds.length === 0) return false
+	for (let choiceId of choiceIds) {
+		if (!validValues.includes(vote.chosen[choiceId])) return false
+	}
+
+	return true
 }
 
 module.exports = isValidVote
