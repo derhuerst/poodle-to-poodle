@@ -20,10 +20,8 @@ const createUi = require('./ui')
 	// todo: change UI
 	const votes = await votesIndex.get()
 
-	const render = createUi(document.querySelector('#app'))
-	const rerender = () => {
-		render(poll, votes) // todo
-	}
+	const render = createUi(document.querySelector('#app'), {})
+	const rerender = () => render(state)
 	rerender()
 })()
 .catch((err) => {

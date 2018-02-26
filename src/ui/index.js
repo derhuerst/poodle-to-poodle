@@ -8,7 +8,7 @@ const styleForSnabbdom = require('snabbdom/modules/style').default
 const eventsForSnabbdom = require('snabbdom/modules/eventlisteners').default
 const h = require('snabbdom/h').default
 
-const renderPoll = require('./poll')
+const createRenderPoll = require('./poll')
 
 const patch = snabbdom.init([
 	attrsForSnabbdom,
@@ -18,12 +18,13 @@ const patch = snabbdom.init([
 	eventsForSnabbdom,
 ])
 
-const createUi = (container) => {
+const createUi = (container, actions) => {
 	let tree = container
+	const renderPoll = createRenderPoll(actions)
 
-	const rerender = (...args) => {
+	const rerender = (state) => {
 		const newTree = h('main', {attrs: {id: 'content'}}, [
-			renderPoll(...args)
+			renderPoll(state)
 		])
 		patch(tree, newTree)
 		tree = newTree
