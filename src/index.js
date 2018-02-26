@@ -1,5 +1,7 @@
 'use strict'
 
+require('babel-polyfill')
+
 const snabbdom = require('snabbdom')
 const attrsForSnabbdom = require('snabbdom/modules/attributes').default
 const propsForSnabbdom = require('snabbdom/modules/props').default

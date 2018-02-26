@@ -28,7 +28,7 @@
 		"babel-core": "^6.26.0",
 		"babel-preset-env": "^1.6.1",
 		"babelify": "^8.0.0",
-		"browserify": "^14.5.0",
+		"browserify": "^16.1.0",
 		"envify": "^4.1.0",
 		"uglifyify": "^4.0.5"
 	},
@@ -37,8 +37,9 @@
 		"build:dev": "env NODE_ENV=dev browserify src/index.js >dist/bundle.js"
 	},
 	"dependencies": {
+		"babel-polyfill": "^6.26.0",
 		"crypto-random-string": "^1.0.0",
-		"luxon": "^0.2.6",
+		"luxon": "^0.5.3",
 		"ms": "^2.1.1",
 		"snabbdom": "^0.7.0"
 	}
