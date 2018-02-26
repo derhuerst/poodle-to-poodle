@@ -2,24 +2,9 @@
 
 require('babel-polyfill')
 
-const snabbdom = require('snabbdom')
-const attrsForSnabbdom = require('snabbdom/modules/attributes').default
-const propsForSnabbdom = require('snabbdom/modules/props').default
-const classForSnabbdom = require('snabbdom/modules/class').default
-const styleForSnabbdom = require('snabbdom/modules/style').default
-const eventsForSnabbdom = require('snabbdom/modules/eventlisteners').default
 const randomId = require('crypto-random-string')
-const h = require('snabbdom/h').default
 
-const renderPoll = require('./ui/poll')
-
-const patch = snabbdom.init([
-	attrsForSnabbdom,
-	propsForSnabbdom,
-	classForSnabbdom,
-	styleForSnabbdom,
-	eventsForSnabbdom,
-])
+const createUi = require('./ui')
 
 ;(async () => {
 	const baseUrl = global.location.protocol + '//' + global.location.host
@@ -165,13 +150,9 @@ const patch = snabbdom.init([
 		rerender()
 	}
 
-	let tree = document.querySelector('#app')
+	const render = createUi(document.querySelector('#app'))
 	const rerender = () => {
-		const newTree = h('main', {attrs: {id: 'content'}}, [
-			renderPoll(poll, votes, onSubmit, createVotingPageForPoll, syncWithOtherDat)
-		])
-		patch(tree, newTree)
-		tree = newTree
+		render(poll, votes, onSubmit, createVotingPageForPoll, syncWithOtherDat)
 	}
 	rerender()
 })()
