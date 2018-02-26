@@ -34,6 +34,7 @@
 		"build:dev": "env NODE_ENV=dev browserify src/index.js >dist/bundle.js"
 	},
 	"dependencies": {
+		"@beaker/webdb": "^4.1.0",
 		"luxon": "^0.5.3",
 		"ms": "^2.1.1",
 		"snabbdom": "^0.7.0"
