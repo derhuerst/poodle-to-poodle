@@ -5,6 +5,7 @@ const WebDB = require('@beaker/webdb')
 
 const createVotesIndex = require('./lib/votes-index')
 const addVoteDat = require('./lib/add-vote-dat')
+const isValidVote = require('./lib/is-valid-vote')
 const createUi = require('./ui')
 
 const newVote = (author, chosen) => {
@@ -64,8 +65,10 @@ const newVote = (author, chosen) => {
 	}
 
 	const putOwnVote = (author, chosen) => {
-		_putOwnVote(author, chosen)
-		.catch(console.error) // todo: display error
+		if (isValidVote(newVote(author, chosen))) {
+			_putOwnVote(author, chosen)
+			.catch(console.error) // todo: display error
+		}
 	}
 	const actions = {putOwnVote}
 
