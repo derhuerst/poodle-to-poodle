@@ -60,7 +60,6 @@ const newVote = (author, chosen) => {
 
 		await addVoteDat(archive, ownVoteDat)
 
-		state.votes.push(vote)
 		rerender()
 	}
 
