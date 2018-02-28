@@ -18,7 +18,8 @@ const isValidVote = (vote) => {
 	const choiceIds = Object.keys(vote.chosen)
 	if (choiceIds.length === 0) return false
 	for (let choiceId of choiceIds) {
-		if (!validValues.includes(vote.chosen[choiceId])) return false
+		const val = vote.chosen[choiceId]
+		if (!validValues.includes(val)) return false
 	}
 
 	return true

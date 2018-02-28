@@ -46,18 +46,18 @@ const newVote = (author, chosen) => {
 			state.votes.push(vote)
 		}
 
-		let voteArchive
+		let voteDatArchive
 		if (!ownVoteDat) {
 			// todo: handle rejection
-			voteArchive = await DatArchive.create({
+			voteDatArchive = await DatArchive.create({
 				// todo: add meaningful metadata
 				title: 'poodle-to-poodle vote'
 			})
-			ownVoteDat = voteArchive.url
+			ownVoteDat = voteDatArchive.url
 			window.localStorage.setItem('own-vote-dat', ownVoteDat)
-		} else voteArchive = new DatArchive(ownVoteDat)
+		} else voteDatArchive = new DatArchive(ownVoteDat)
 
-		await putVote(voteArchive, vote)
+		await putVote(voteDatArchive, vote)
 		await addVoteDat(archive, ownVoteDat)
 
 		rerender()
