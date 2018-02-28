@@ -32,6 +32,7 @@ const newVote = (author, chosen) => {
 
 	const state = {
 		poll,
+		ownVoteDat,
 		votes: await votesIndex.get()
 	}
 

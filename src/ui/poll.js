@@ -27,6 +27,7 @@ const renderPoll = (state, actions) => {
 
 	const votesRows = []
 	for (let vote of state.votes) {
+		if (vote.isOwner) continue
 		const cells = [
 			h('td', {
 				class: {'poll-vote-author': true}
@@ -54,9 +55,12 @@ const renderPoll = (state, actions) => {
 	}
 
 	// state
-	let author = ''
+	const ownVote = state.votes.find(vote => vote.isOwner)
+	let author = ownVote ? ownVote.author : ''
 	const chosen = {}
-	for (let choiceId of Object.keys(state.poll.choices)) chosen[choiceId] = 'yes'
+	for (let choiceId of Object.keys(state.poll.choices)) {
+		chosen[choiceId] = ownVote ? ownVote.chosen[choiceId] : 'yes'
+	}
 
 	const onAuthorChange = (newAuthor) => {
 		author = newAuthor
@@ -77,7 +81,7 @@ const renderPoll = (state, actions) => {
 			// todo: use thead & tbody
 			h('tr', {class: {'poll-choices': true}}, choices),
 			h('tr', {class: {'poll-summary': true}}, summary),
-			renderPollSubmitRow(chosen, onAuthorChange, onChosen),
+			renderPollSubmitRow(author, chosen, onAuthorChange, onChosen),
 			...votesRows
 		]),
 		h('button', {

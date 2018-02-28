@@ -4,7 +4,7 @@ const h = require('snabbdom/h').default
 
 const renderThreeStatesSwitch = require('./three-states-switch')
 
-const renderPollSubmitRow = (choices, onAuthorChange, onChosen) => {
+const renderPollSubmitRow = (author, chosen, onAuthorChange, onChosen) => {
 	const onAuthorInputChange = (ev) => {
 		onAuthorChange(ev.target.value)
 	}
@@ -17,7 +17,8 @@ const renderPollSubmitRow = (choices, onAuthorChange, onChosen) => {
 			inputmode: 'verbatim',
 			maxlength: '50',
 			minlength: '1',
-			placeholder: 'your name' // todo: use a <label>
+			placeholder: 'your name', // todo: use a <label>
+			value: author || ''
 			// todo: tabindex
 		},
 		on: {change: onAuthorInputChange}
@@ -26,11 +27,9 @@ const renderPollSubmitRow = (choices, onAuthorChange, onChosen) => {
 	const row = [
 		h('td', {}, [authorInput])
 	]
-	Object.keys(choices).forEach((choiceId) => {
-		const initialVal = choices[choiceId]
-
+	Object.entries(chosen).forEach(([choiceId, val]) => {
 		row.push(h('td', {}, [
-			renderThreeStatesSwitch(c => onChosen(choiceId, c), initialVal)
+			renderThreeStatesSwitch(c => onChosen(choiceId, c), val || 'yes')
 		]))
 	})
 
