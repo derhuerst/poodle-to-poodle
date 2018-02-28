@@ -5,7 +5,7 @@ const WebDB = require('@beaker/webdb')
 
 const createVotesIndex = require('./lib/votes-index')
 const addVoteDat = require('./lib/add-vote-dat')
-const isValidVote = require('./lib/is-valid-vote')
+const putVote = require('./lib/put-vote')
 const createUi = require('./ui')
 
 const newVote = (author, chosen) => {
@@ -56,19 +56,15 @@ const newVote = (author, chosen) => {
 			window.localStorage.setItem('own-vote-dat', ownVoteDat)
 		} else voteArchive = new DatArchive(ownVoteDat)
 
-		await voteArchive.writeFile('/vote.json', JSON.stringify(vote))
-		await voteArchive.commit()
-
+		await putVote(voteArchive, vote)
 		await addVoteDat(archive, ownVoteDat)
 
 		rerender()
 	}
 
 	const putOwnVote = (author, chosen) => {
-		if (isValidVote(newVote(author, chosen))) {
-			_putOwnVote(author, chosen)
-			.catch(console.error) // todo: display error
-		}
+		_putOwnVote(author, chosen)
+		.catch(console.error) // todo: display error
 	}
 	const actions = {putOwnVote}
 

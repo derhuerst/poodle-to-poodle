@@ -27,10 +27,14 @@ const createVotesIndex = async (self, db, archive, ownVoteDat) => {
 
 	const getIndexedVotes = async () => {
 		const votes = await db.votes.query().toArray()
-		for (let vote of votes) {
-			if (vote.getRecordOrigin() === ownVoteDat) vote.isOwner = true
-		}
-		return votes
+		return votes.map((vote) => {
+			return {
+				id: vote.id,
+				author: vote.author,
+				chosen: vote.chosen,
+				isOwner: vote.getRecordOrigin() === ownVoteDat
+			}
+		})
 	}
 
 	// todo: write support
